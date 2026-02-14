@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Czy zostaniesz moją Walentynką?</title>
+  <style>
+    :root{
+      --green:#22c55e;
+      --greenHover:#15803d;
+      --red:#ef4444;
+      --redHover:#b91c1c;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:#fff;
+      color:#111;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .app{
+      margin-top:-64px; /* -mt-16 */
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:16px;
+    }
+    img{ display:block; max-width:92vw; height:auto; }
+    .gifSmall{ height:200px; width:auto; }
+
+    h1{
+      margin:16px 0;
+      font-size:36px; /* text-4xl */
+      font-weight:400;
+    }
+    .finalTitle{
+      margin:16px 0;
+      font-size:36px; /* text-4xl */
+      font-weight:800; /* font-bold */
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .btn{
+      border:none;
+      border-radius:6px;
+      padding:8px 16px;
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      user-select:none;
+      touch-action:manipulation;
+      line-height:1;
+    }
+    .btnYes{
+      background:var(--green);
+      margin-right:16px; /* mr-4 */
+      transition: font-size .12s ease, background-color .12s ease;
+    }
+    .btnYes:hover{ background:var(--greenHover); }
+
+    .btnNo{
+      background:var(--red);
+      transition: background-color .12s ease;
+      white-space:nowrap;
+    }
+    .btnNo:hover{ background:var(--redHover); }
+
+    @media (max-width:420px){
+      h1, .finalTitle{ font-size:28px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <img id="gif"
+         class="gifSmall"
+         src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif"
+         alt="Miś z różami" />
+
+    <h1 id="title">Czy zostaniesz moją Walentynką?</h1>
+
+    <div class="actions" id="actions">
+      <button class="btn btnYes" id="yesBtn" type="button">TAK</button>
+      <button class="btn btnNo" id="noBtn" type="button">NIE</button>
+    </div>
+  </div>
+
+  <script>
+    const gifEl = document.getElementById("gif");
+    const titleEl = document.getElementById("title");
+    const actionsEl = document.getElementById("actions");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    let noCount = 0;
+    let yesPressed = false;
+
+    // PL wersja tekstów po klikaniu "NIE"
+    const phrases = [
+      "NIE",
+      "Na pewno?",
+      "A jeśli poproszę naprawdę ładnie?",
+      "No proszę…",
+      "Oddam nerkę",
+      "Zrobię wszystko",
+      "PROSZĘ, SKARBIE 🥺",
+      "Będę nosił Ci torby do końca życia…",
+      "Ale :*(",
+      "Umrę…",
+      "No dobra, umarłem",
+      "Okej, gadasz z moim duchem 👻",
+      "No proszę, kochanie…",
+      ":((((",
+      "NO PROSZĘ!!!",
+      "Jestem martwy",
+"To boli bardziej niż powinno…",
+      "Nie :("
+    ];
+
+    function getNoButtonText() {
+      return phrases[Math.min(noCount, phrases.length - 1)];
+    }
+
+    function updateUI() {
+      if (yesPressed) {
+        gifEl.classList.remove("gifSmall");
+        gifEl.src = "https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif";
+        gifEl.alt = "Całujące się misie";
+
+        titleEl.className = "finalTitle";
+        titleEl.textContent = "WOOOOOO!!! Kocham Cię, skarbie!! :))";
+
+        actionsEl.style.display = "none";
+        return;
+      }
+
+      // TAK rośnie dokładnie jak w oryginale: noCount*20 + 16
+      const yesButtonSize = noCount * 20 + 16;
+      yesBtn.style.fontSize = yesButtonSize + "px";
+
+      // NIE zmienia tekst (nie ucieka!)
+      noBtn.textContent = (noCount === 0) ? "NIE" : getNoButtonText();
+    }
+
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      noCount += 1;
+      updateUI();
+    });
+
+    yesBtn.addEventListener("click", () => {
+      yesPressed = true;
+      updateUI();
+    });
+
+    updateUI();
+  </script>
+</body>
+</html>
